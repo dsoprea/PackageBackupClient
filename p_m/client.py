@@ -2,7 +2,8 @@ from requests import post
 from bz2 import compress
 
 from p_m.config import CLIENT_ID, API_URL_LIST_PUSH, API_CLIENT_ID_HEADER, \
-                       API_AUTH_KEY_HEADER, API_AUTH_SECRET_HEADER
+                       API_AUTH_KEY_HEADER, API_AUTH_SECRET_HEADER, \
+                       api_is_success
 
 from p_m.prefs import Prefs
 
@@ -23,11 +24,26 @@ class Client(object):
                     API_AUTH_SECRET_HEADER: self.__prefs.get('api_secret') }
 
         r = post(url, headers=headers, data=data, verify=True)
-        if api_is_success(r.status) is False:
-            raise Exception("API connection failed with (%d) for [%s]." % 
-                            (r.status, type_phrase))
-        
-        response = r.json()
+        is_decoded = False
+
+        try:
+            response = r.json()
+        except:
+            response = r.content
+            
+            if not response:
+                response = '<no content>'
+        else:
+            is_decoded = True
+# TODO: Replace Exception() with specific exceptions.
+        if api_is_success(r.status_code) is False:
+            raise Exception("API connection failed with (%d) for [%s]:\n%s" % 
+                            (r.status_code, type_phrase, response))
+
+        if is_decoded is False:
+            raise Exception("Could not decode response as JSON:\n%s" % 
+                            (response))
+
         if response.success is False:
             raise Exception("Request returned failure for [%s]: %s" % 
                             (type_phrase, response))
