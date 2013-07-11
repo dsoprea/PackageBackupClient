@@ -11,21 +11,25 @@ _prefs_path = environ.get(PREFS_PATH_ENVIRON, expandvars(PREFS_PATH))
 _prefs_filepath = ('%s/%s' % (_prefs_path, PREFS_FILENAME))
 
 _default_prefs = { 'version': 1,
+                   'system_name': None,
                    'api_key': None,
                    'api_secret': None }
 
 # The prefs that always have to be given at initialization.
-_required_keys = ('api_key', 'api_secret')
+_required_keys = ('system_name', 'api_key', 'api_secret')
 
 def _validate_prefs(prefs):
     if prefs is None:
         raise Exception("Prefs not loaded.")
     
-    elif not prefs.get('api_key') or \
+    elif not prefs.get('system_name') or \
+         not prefs.get('api_key') or \
          not prefs.get('api_secret'):
 
-        raise Exception("API key [%s] and secret [%s] are not complete." % 
-                        (prefs.get('api_key'), 
+        raise Exception("System name [%s], API key [%s], and/or API secret "
+                        "[%s] are not complete." % 
+                        (prefs.get('system_name'),
+                         prefs.get('api_key'), 
                          prefs.get('api_secret')))
 
 

@@ -10,15 +10,22 @@ description = "Write the current user's Package Monitor configuration."
 parser = ArgumentParser(description=description)
 mutex = parser.add_mutually_exclusive_group(required=True)
 
-mutex.add_argument('--set', nargs=2, metavar=('key', 'secret'), 
-                   help="Set the API credentials.")
+mutex.add_argument('--set-initial', nargs=3, metavar=('system_name', 'key', 'secret'), 
+                   help="Set [initial] configuration.")
+mutex.add_argument('--set-system-name', nargs=1, metavar=('system_name'), 
+                   help="Set system-name.")
+mutex.add_argument('--set-creds', nargs=2, metavar=('key', 'secret'), 
+                   help="Set API credentials.")
 mutex.add_argument('--display', action='store_true', help="Display stored preferences.")
 
 result = parser.parse_args()
 
-if result.set:
-    prefs_ = { 'api_key': result.set[0],
-               'api_secret': result.set[1] }
+prefs = Prefs()
+
+if result.set_initial:
+    prefs_ = { 'system_name': result.set_initial[0],
+               'api_key': result.set_initial[1],
+               'api_secret': result.set_initial[2] }
 
     prefs = Prefs()
     prefs.initialize(prefs_)
@@ -26,10 +33,35 @@ if result.set:
     prefs.save()
 
     print("Preferences saved.")
+elif result.set_system_name:
+    try:
+        prefs.load()
+    except:
+        print("Can not load current configuration. It must already exist (1).")
+        exit(1)
+    
+    prefs.set('system_name', result.set_system_name[0])
+    prefs.save()
 
+    print("Preferences saved.")
+elif result.set_creds:
+    try:
+        prefs.load()
+    except:
+        print("Can not load current configuration. It must already exist (2).")
+        exit(1)
+
+    prefs.set('api_key', result.set_creds[0])
+    prefs.set('api_secret', result.set_creds[1])
+    prefs.save()
+
+    print("Preferences saved.")
 elif result.display:
-    prefs = Prefs()
-    prefs.load()
+    try:
+        prefs.load()
+    except:
+        print("Can not load current configuration.")
+        exit(1)
 
     for k, v in prefs.get_dict().iteritems():
         print("%s: %s" % (k, v))
