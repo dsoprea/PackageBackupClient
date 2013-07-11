@@ -18,6 +18,10 @@ _default_prefs = { 'version': 1,
 # The prefs that always have to be given at initialization.
 _required_keys = ('system_name', 'api_key', 'api_secret')
 
+_max_lengths = { 'system_name': 30,
+                 'api_key': 100,
+                 'api_secret': 100 }
+
 def _validate_prefs(prefs):
     if prefs is None:
         raise Exception("Prefs not loaded.")
@@ -60,6 +64,9 @@ class Prefs(object):
     def set(self, key, value):
         if key not in self.__prefs:
             raise KeyError('Can not set invalid key [%s].' % (key))
+        elif len(value) > _max_lengths[key]:
+            raise Exception("Value [%s] for key [%s] exceeds maximum length of"
+                            " (%d)." % (_max_lengths[key]))
 
         self.__prefs[key] = value
 

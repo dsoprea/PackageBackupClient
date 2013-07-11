@@ -1,5 +1,6 @@
 from requests import post
 from bz2 import compress
+from base64 import b64encode
 
 from p_m.config import CLIENT_ID, API_URL_LIST_PUSH, API_CLIENT_ID_HEADER, \
                        API_AUTH_KEY_HEADER, API_AUTH_SECRET_HEADER, \
@@ -59,7 +60,7 @@ class Client(object):
         data = { 'repo_type': system_info.repo_type,
                  'os_type': system_info.os_type, 
                  'os_version': system_info.os_version, 
-                 'data': package_list_bz2 }
+                 'data': b64encode(package_list_bz2) }
 
         self.__send('list_push', API_URL_LIST_PUSH, data)
 
