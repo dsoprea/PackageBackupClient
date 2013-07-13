@@ -11,13 +11,13 @@ class PacmanPackageListGetter(IPackageListGetter):
         restore the packages.
         """
 
-        command = ['dpkg', '--get-selections']
+        command = ['pacman', '-Qqen']
         p = Popen(command, stdout=PIPE)
         list_data = p.communicate()[0]
 
         if p.returncode != 0:
-            raise Exception("The package-list call returned error (%d)." % 
-                            (p.returncode))
+            raise Exception("The 'pacman' package-list call returned error "
+                            "(%d)." % (p.returncode))
 
         return list_data
 

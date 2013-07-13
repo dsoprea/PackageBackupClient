@@ -3,11 +3,11 @@
 from sys import exit
 
 from p_m.system.system_types import get_system_imps, SYS_UBUNTU
-from p_m.system.repo_types import get_repo_imps, SYS_APT
+from p_m.system.repo_types import get_repo_imps, SYS_DPKG
 from p_m.client import Client
 
 system_profiler = get_system_imps(SYS_UBUNTU)
-package_list_getter = get_repo_imps(SYS_APT)
+package_list_getter = get_repo_imps(SYS_DPKG)
 
 # Gather data.
 
