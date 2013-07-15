@@ -54,9 +54,6 @@ class Client(object):
     def list_push(self, system_info, package_list_raw):
         package_list_bz2 = compress(package_list_raw)
 
-        with file('/tmp/packages.bz2', 'w') as f:
-            f.write(package_list_bz2)
-
         data = { 'repo_type': system_info.repo_type,
                  'os_type': system_info.os_type, 
                  'os_version': system_info.os_version, 

@@ -85,7 +85,7 @@ class Prefs(object):
             self.__prefs = load(f)
         
     def exists(self):
-        return exists(_prefs_filepath) and self.get_prefs()
+        return exists(_prefs_filepath)
     
     def clear(self):
         self.__prefs = None

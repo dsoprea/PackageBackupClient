@@ -1,4 +1,4 @@
-from p_m.system.system_specific import ubuntu, arch
+from p_m.system.system_types import ubuntu, arch
 
 SYS_UBUNTU = 'ubuntu'
 SYS_ARCH = 'arch'

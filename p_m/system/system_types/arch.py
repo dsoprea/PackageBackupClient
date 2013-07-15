@@ -22,7 +22,7 @@ class ArchSystemProfiler(ISystemProfiler):
     
     def get_system_info(self):
 
-        repo_type = 'apt'
+        repo_type = 'pacman'
         os_type = self.__info_getter('-i')
         os_version = self.__info_getter('-r')
         

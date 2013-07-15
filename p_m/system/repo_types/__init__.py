@@ -1,4 +1,4 @@
-from p_m.system.system_specific import dpkg, pacman
+from p_m.system.repo_types import dpkg, pacman
 
 SYS_DPKG = 'dpkg'
 SYS_PACMAN = 'pacman'

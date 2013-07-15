@@ -37,8 +37,12 @@ elif result.set_system_name:
     try:
         prefs.load()
     except:
-        print("Can not load current configuration. It must already exist (1).")
-        exit(1)
+        if prefs.exists():
+            print("Can not load current configuration. It does not exist.")
+            exit(1)
+        else:
+            print("Can not load current configuration. There was an error.")
+            exit(2)
     
     prefs.set('system_name', result.set_system_name[0])
     prefs.save()
@@ -48,8 +52,12 @@ elif result.set_creds:
     try:
         prefs.load()
     except:
-        print("Can not load current configuration. It must already exist (2).")
-        exit(1)
+        if prefs.exists():
+            print("Can not load current configuration. It does not exist. (2)")
+            exit(3)
+        else:
+            print("Can not load current configuration. There was an error. (2)")
+            exit(4)
 
     prefs.set('api_key', result.set_creds[0])
     prefs.set('api_secret', result.set_creds[1])
@@ -60,8 +68,12 @@ elif result.display:
     try:
         prefs.load()
     except:
-        print("Can not load current configuration.")
-        exit(1)
+        if prefs.exists():
+            print("Can not load current configuration. It does not exist. (3)")
+            exit(5)
+        else:
+            print("Can not load current configuration. There was an error. (3)")
+            exit(6)
 
     for k, v in prefs.get_dict().iteritems():
         print("%s: %s" % (k, v))
