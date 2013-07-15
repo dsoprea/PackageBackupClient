@@ -36,20 +36,20 @@ class Client(object):
                 response = '<no content>'
         else:
             is_decoded = True
+
 # TODO: Replace Exception() with specific exceptions.
         if api_is_success(r.status_code) is False:
-            raise Exception("API connection failed with (%d) for [%s]:\n%s" % 
-                            (r.status_code, type_phrase, response))
-
-        if is_decoded is False:
+            raise Exception("API connection failed with (%d) for [%s].\n\n%s" % 
+                            (r.status_code, type_phrase, response['message']))
+        elif is_decoded is False:
             raise Exception("Could not decode response as JSON:\n%s" % 
                             (response))
+        elif response['error'] is not None:
+            raise Exception("Request returned failure for [%s] (%s).\n\n%s" % 
+                            (type_phrase, response['error'], 
+                             response['message']))
 
-        if response.success is False:
-            raise Exception("Request returned failure for [%s]: %s" % 
-                            (type_phrase, response))
-
-        return response
+        return response['result']
 
     def list_push(self, system_info, package_list_raw):
         package_list_bz2 = compress(package_list_raw)
@@ -59,5 +59,5 @@ class Client(object):
                  'os_version': system_info.os_version, 
                  'data': b64encode(package_list_bz2) }
 
-        self.__send('list_push', API_URL_LIST_PUSH, data)
+        return self.__send('list_push', API_URL_LIST_PUSH, data)
 

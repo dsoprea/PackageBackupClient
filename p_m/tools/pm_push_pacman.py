@@ -14,7 +14,11 @@ package_list_getter = get_repo_imps(SYS_PACMAN)
 system_info = system_profiler().get_system_info()
 package_list = package_list_getter().get_package_list()
 
-Client().list_push(system_info, package_list)
+try:
+    Client().list_push(system_info, package_list)
+except Exception as e:
+    print(str(e))
+    exit(1)
 
 exit(0)
 

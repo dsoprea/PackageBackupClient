@@ -1,5 +1,4 @@
-from snackwich.exceptions import RedrawException, BreakSuccessionException, \
-                                 GotoPanelException, QuitException
+from snackwich.exceptions import GotoPanelException, QuitException
 
 from p_m.prefs import Prefs
 values = { 'system_name': '',
@@ -19,9 +18,11 @@ def post_callback(sw, key, result, expression, screen):
     if result['button'] == BTN_CANCEL or result['is_esc']:
         raise QuitException()
 
-    values['system_name'] = result['values'][0]
-    values['api_key'] = result['values'][1]
-    values['api_secret'] = result['values'][2]
+    values = dict(zip(('system_name', 'api_key', 'api_secret'), 
+                      result['values']))
+
+    for k, v in values.items():
+        values[k] = v.strip()
 
     if values['system_name'] == '' or values['api_key'] == '' or \
        values['api_secret'] == '':
