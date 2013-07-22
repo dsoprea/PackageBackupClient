@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
-from sys import exit
+from sys import exit, path
+path.insert(0, '.')
+
 from snackwich.main import Snackwich
 
 from p_m.tools.data.pm_config_snack import config

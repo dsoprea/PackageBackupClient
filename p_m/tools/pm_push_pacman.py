@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
-from sys import exit
+from sys import exit, path
+path.insert(0, '.')
+
+import logging
+
 from argparse import ArgumentParser
 
 from p_m.system.system_types import get_system_imps, SYS_ARCH

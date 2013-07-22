@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
-from sys import exit
+from sys import exit, path
+path.insert(0, '.')
+
 from argparse import ArgumentParser
 
 from p_m.prefs import Prefs
