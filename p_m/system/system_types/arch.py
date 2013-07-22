@@ -12,13 +12,14 @@ class ArchSystemProfiler(ISystemProfiler):
     def __info_getter(self, argument):
         command = ['lsb_release', argument]
         p = Popen(command, stdout=PIPE)
-        result = p.communicate()[0]
+        result = p.communicate()[0].decode('ASCII')
         
         if p.returncode != 0:
             raise Exception("Could not get system info with argument ['%s']." % 
                             (argument))
     
-        return result[result.index(':') + 1:].strip()
+        starts_at = (result.index(':') + 1)
+        return result[starts_at:].strip()
     
     def get_system_info(self):
 

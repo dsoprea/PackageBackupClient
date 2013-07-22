@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from sys import exit
 from argparse import ArgumentParser
@@ -75,6 +75,6 @@ elif result.display:
             print("Can not load current configuration. There was an error. (3)")
             exit(6)
 
-    for k, v in prefs.get_dict().iteritems():
+    for k, v in prefs.get_dict().items():
         print("%s: %s" % (k, v))
 

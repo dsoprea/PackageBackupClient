@@ -58,7 +58,7 @@ class Prefs(object):
             raise Exception("One or more required prefs were omitted: %s" % 
                             ((required - given),))
 
-        for k, v in values.iteritems():
+        for k, v in values.items():
             self.set(k, v)
 
     def set(self, key, value):
@@ -81,7 +81,7 @@ class Prefs(object):
         if self.__prefs is not None:
             return
 
-        with file(_prefs_filepath) as f:
+        with open(_prefs_filepath) as f:
             self.__prefs = load(f)
         
     def exists(self):
@@ -97,10 +97,10 @@ class Prefs(object):
         if exists(_prefs_path) is False:
             makedirs(_prefs_path)
 
-        with file(LOCK_FILEPATH, 'w') as l:
+        with open(LOCK_FILEPATH, 'w') as l:
             lockf(l, LOCK_EX)        
 
-            with file(_prefs_filepath, 'w') as f:
+            with open(_prefs_filepath, 'w') as f:
                 dump(self.__prefs, f)
 
             lockf(l, LOCK_UN)

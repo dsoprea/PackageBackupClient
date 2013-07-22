@@ -1,3 +1,5 @@
+import logging
+
 from requests import post
 from bz2 import compress
 from base64 import b64encode
@@ -15,6 +17,8 @@ class Client(object):
         self.__prefs.load()
 
     def __send(self, type_phrase, url, data_extra):
+        logging.debug("Sending to [%s]." % (url))
+
         data = { 'client_version': self.__prefs.get('version'),
                  'system_name': self.__prefs.get('system_name') }
 
@@ -52,6 +56,8 @@ class Client(object):
         return response['result']
 
     def list_push(self, system_info, package_list_raw):
+        logging.debug("Pushing list to system [%s]." % (system_info))
+    
         package_list_bz2 = compress(package_list_raw)
 
         data = { 'repo_type': system_info.repo_type,

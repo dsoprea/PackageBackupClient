@@ -1,6 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from sys import exit
+import logging
 from argparse import ArgumentParser
 
 from p_m.system.system_types import get_system_imps, SYS_UBUNTU
@@ -26,7 +27,7 @@ package_list = package_list_getter().get_package_list()
 try:
     Client().list_push(system_info, package_list)
 except Exception as e:
-    print(str(e))
+    logging.exception("There was a problem pushing.")
     exit(1)
 
 exit(0)

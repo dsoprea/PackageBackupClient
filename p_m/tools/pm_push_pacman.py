@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from sys import exit
 from argparse import ArgumentParser
@@ -26,7 +26,7 @@ package_list = package_list_getter().get_package_list()
 try:
     Client().list_push(system_info, package_list)
 except Exception as e:
-    print(str(e))
+    logging.exception("There was a problem pushing.")
     exit(1)
 
 exit(0)
