@@ -20,3 +20,6 @@ API_URL_LIST_PUSH = ('%s%s' % (API_URL_PREFIX, '/api/list/push'))
 def api_is_success(status_code):
     return (status_code == 200)
 
+DROPBOX_APP_KEY = 'pylrjsa6072s513'
+DROPBOX_APP_SECRET = '9m1l2bg6knyszon'
+
