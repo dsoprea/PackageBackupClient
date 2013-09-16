@@ -1,0 +1,35 @@
+from pysftp import Connection
+from os.path import isabs
+
+
+class SftpClientInner(IRemoteFileClient):
+    def __init__(self, hostname):
+        self.__c = Connection(hostname)
+
+    def ls_long(self, hidden=False):
+        parameters = '-al' if hidden is True else '-l'
+        path_escaped = self.current_path.replace('"', '\"')
+    
+        return self.__c.execute('ls \"%s\" %s' % 
+                                (path_escaped, parameters))
+
+    def get(self, filename):
+        return self.__c.get(filename)
+
+    def put(self, file_path, remote_filename=None):
+        return self.__c.put(file_path, remote_filename)
+
+    @property
+    def current_path(self):
+        whole_path = '/'.join(self.__path)
+
+        return self.__is_relative
+
+
+class SftpClient(object):
+    def __enter__(self, hostname):
+        self.__obj = SftpClientInner(hostname)
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        del self.__obj
+
