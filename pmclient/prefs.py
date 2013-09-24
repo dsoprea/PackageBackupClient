@@ -114,7 +114,7 @@ class Prefs(object):
             return
 
         with open(_prefs_filepath) as f:
-            self.__prefs = load(f)
+            self.__prefs = json.load(f)
         
     def exists(self):
         return exists(_prefs_filepath)

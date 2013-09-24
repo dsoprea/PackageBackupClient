@@ -13,7 +13,7 @@ parser = ArgumentParser(description=description)
 mutex = parser.add_mutually_exclusive_group(required=True)
 
 mutex.add_argument('--set-initial', 
-                   nargs=3, 
+                   nargs=5, 
                    metavar=('system_name', 'key', 'secret', 
                             'backup_agent_class', 'backup_agent_json_file'), 
                    help="Set [initial] configuration.")
@@ -44,12 +44,12 @@ prefs = Prefs()
 def load_prefs():
     try:
         prefs.load()
-    except:
-        if prefs.exists():
+    except Exception as e:
+        if prefs.exists() is False:
             print("Can not load current configuration. It does not exist.")
             exit(1)
         else:
-            print("Can not load current configuration. There was an error.")
+            print("Can not load current configuration: %s" % (str(e)))
             exit(2)
 
 if result.set_initial:
