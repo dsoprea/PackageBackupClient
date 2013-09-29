@@ -17,7 +17,7 @@ parser.add_argument('-v', '--verbose', action='store_true', help="Show logging."
 result = parser.parse_args()
 
 if result.verbose:
-    from p_m import logging_config
+    from pmclient import logging_config
 
 system_profiler = get_system_imps(SYS_UBUNTU)
 package_list_getter = get_repo_imps(SYS_DPKG)
@@ -33,5 +33,6 @@ except Exception as e:
     logging.exception("There was a problem pushing.")
     exit(1)
 
+print("Push successful.")
 exit(0)
 

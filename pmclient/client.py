@@ -1,8 +1,10 @@
 import logging
+import time
 
 from requests import post
 from bz2 import compress
 from base64 import b64encode
+from time import tzname
 
 from pmclient.config import CLIENT_ID, API_URL_LIST_PUSH, \
                             API_CLIENT_ID_HEADER, API_AUTH_KEY_HEADER, \
@@ -19,8 +21,8 @@ class Client(object):
     def __send(self, type_phrase, url, data_extra):
         logging.debug("Sending to [%s]." % (url))
 
-        data = { 'client_version': self.__prefs.get('version'),
-                 'system_name': self.__prefs.get('system_name') }
+        data = { 'cv': self.__prefs.get('version'),
+                 'sn': self.__prefs.get('system_name') }
 
         data.update(data_extra)
 
@@ -43,8 +45,9 @@ class Client(object):
 
 # TODO: Replace Exception() with specific exceptions.
         if api_is_success(r.status_code) is False:
+            reason = response['message'] if is_decoded is True else r.reason
             raise Exception("API connection failed with (%d) for [%s].\n\n%s" % 
-                            (r.status_code, type_phrase, response['message']))
+                            (r.status_code, type_phrase, reason))
         elif is_decoded is False:
             raise Exception("Could not decode response as JSON:\n%s" % 
                             (response))
@@ -60,10 +63,11 @@ class Client(object):
     
         package_list_bz2 = compress(package_list_raw)
 
-        data = { 'repo_type': system_info.repo_type,
-                 'os_type': system_info.os_type, 
-                 'os_version': system_info.os_version, 
-                 'data': b64encode(package_list_bz2) }
+        data = { 'rt': system_info.repo_type,
+                 'ot': system_info.os_type, 
+                 'ov': system_info.os_version, 
+                 'd': b64encode(package_list_bz2),
+                 'tn': tzname[0] }
 
         return self.__send('list_push', API_URL_LIST_PUSH, data)
 
