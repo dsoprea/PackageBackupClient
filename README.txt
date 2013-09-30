@@ -1,3 +1,14 @@
+Requirements
+============
+
+requests
+snackwich
+pysecure
+
+
+Installation
+============
+
 This client is meant to be used with an account on Package 
 Monitor. Following the directions there, you will:
 
