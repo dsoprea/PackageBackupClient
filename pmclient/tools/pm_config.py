@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 
 from pmclient.prefs import Prefs
 
-description = "Write the current user's Package Monitor configuration."
+description = "Write the current user's Package Backup configuration."
 
 parser = ArgumentParser(description=description)
 mutex = parser.add_mutually_exclusive_group(required=True)

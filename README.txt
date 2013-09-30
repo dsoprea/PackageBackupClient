@@ -10,7 +10,7 @@ Installation
 ============
 
 This client is meant to be used with an account on Package 
-Monitor. Following the directions there, you will:
+Backup. Following the directions there, you will:
 
 1) Download the PM client (this).
 2) Configure the PM client for either DPKG or PACMAN
@@ -19,5 +19,5 @@ Monitor. Following the directions there, you will:
 Once all steps are completed, daily backups will be automatically captured and 
 available for you, for at least two months.
 
-For more information, please visit https://www.packagemonitor.com .
+For more information, please visit http://www.packagebackup.com .
 
