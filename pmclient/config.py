@@ -11,7 +11,7 @@ API_CLIENT_ID_HEADER = 'X-Api-Client-Id'
 API_AUTH_KEY_HEADER = 'X-Api-Auth-Key'
 API_AUTH_SECRET_HEADER = 'X-Api-Auth-Secret'
 
-API_DEFAULT_URL_PREFIX = 'http://www.packagebackup.com'
+API_DEFAULT_URL_PREFIX = 'https://www.packagebackup.com'
 API_URL_PREFIX = environ.get('PM_API_URL_PREFIX', 
                              API_DEFAULT_URL_PREFIX)
 
