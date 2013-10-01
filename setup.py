@@ -1,8 +1,37 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 from setuptools import setup, find_packages
+from setuptools.command.install import install
 
-version = '0.1.1'
+from pmclient import tools
+from pmclient.setup_support import install_user_tool_symlink
+
+version = '0.1.2'
+
+def pre_install():
+    # The setuptools requirements check should catch this, but an exception
+    # about a missing shared library might be confusing.
+    print("Verifying that PySecure exists.")
+
+    try:
+        import pysecure
+    except:
+        print("PySecure can not be loaded.")
+        raise
+
+def post_install():
+    print("")
+    install_user_tool_symlink('pmclient.tools.pm_config_interactive')
+    install_user_tool_symlink('pmclient.tools.pm_config')
+    install_user_tool_symlink('pmclient.tools.pm_push_dpkg')
+    install_user_tool_symlink('pmclient.tools.pm_push_pacman')
+
+
+class custom_install(install):
+    def run(self):
+        pre_install()
+        install.run(self)
+        post_install()
 
 setup(name='pmclient',
       version=version,
@@ -20,7 +49,7 @@ setup(name='pmclient',
       license='GPL2',
       packages=['pmclient'],
       include_package_data=True,
-      zip_safe=False,
+      zip_safe=True,
       install_requires=[
         'requests',
         'snackwich',
@@ -29,5 +58,7 @@ setup(name='pmclient',
       entry_points="""
       # -*- Entry points: -*-
       """,
+      cmdclass={'install': custom_install
+               },
       )
 

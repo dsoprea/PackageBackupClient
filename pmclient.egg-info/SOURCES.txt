@@ -1,0 +1,15 @@
+README.txt
+setup.py
+pmclient/__init__.py
+pmclient/client.py
+pmclient/config.py
+pmclient/logging_config.py
+pmclient/prefs.py
+pmclient/setup_support.py
+pmclient.egg-info/PKG-INFO
+pmclient.egg-info/SOURCES.txt
+pmclient.egg-info/dependency_links.txt
+pmclient.egg-info/entry_points.txt
+pmclient.egg-info/requires.txt
+pmclient.egg-info/top_level.txt
+pmclient.egg-info/zip-safe
