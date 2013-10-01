@@ -26,6 +26,10 @@ def post_install():
     install_user_tool_symlink('pmclient.tools.pm_push_dpkg')
     install_user_tool_symlink('pmclient.tools.pm_push_pacman')
 
+    from pmclient.tools.pm_config_interactive import start_config
+# TODO: Might want to determine the exit state and have more control over the
+#       process.
+    start_config()
 
 class custom_install(install):
     def run(self):

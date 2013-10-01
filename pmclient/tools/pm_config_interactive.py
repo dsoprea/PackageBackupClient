@@ -8,7 +8,7 @@ from snackwich.main import Snackwich
 from pmclient.tools.data.pm_config_snack import config
 from pmclient.prefs import Prefs
 
-if __name__ == '__main__':
+def start_config():
     panels = Snackwich(config)
 
     result = panels.execute('window1')
@@ -34,4 +34,7 @@ if __name__ == '__main__':
     prefs.save()
 
     print("Preferences saved.")
+
+if __name__ == '__main__':
+    start_config()
 
