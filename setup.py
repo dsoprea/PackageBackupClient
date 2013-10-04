@@ -2,6 +2,7 @@
 
 from setuptools import setup, find_packages
 from setuptools.command.install import install
+from subprocess import Popen
 
 from pmclient import tools
 from pmclient.setup_support import install_user_tool_symlink
@@ -9,6 +10,13 @@ from pmclient.setup_support import install_user_tool_symlink
 version = '0.1.4'
 
 def pre_install():
+    try:
+        Popen('lsb_release')
+    except FileNotFoundError:
+        print("lsb_release doesn't seem to be available. Please make sure "
+              "that it's installed.")
+        raise
+
     # The setuptools requirements check should catch this, but an exception
     # about a missing shared library might be confusing.
     print("Verifying that PySecure exists.")
@@ -16,7 +24,8 @@ def pre_install():
     try:
         import pysecure
     except:
-        print("PySecure can not be loaded.")
+        print("PySecure can not be loaded. Please make sure that it's "
+              "installed, along with its dependencies.")
         raise
 
 def post_install():
