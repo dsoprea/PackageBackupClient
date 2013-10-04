@@ -6,7 +6,7 @@ from setuptools.command.install import install
 from pmclient import tools
 from pmclient.setup_support import install_user_tool_symlink
 
-version = '0.1.3'
+version = '0.1.4'
 
 def pre_install():
     # The setuptools requirements check should catch this, but an exception
