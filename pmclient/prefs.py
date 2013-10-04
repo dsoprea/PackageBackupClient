@@ -156,6 +156,9 @@ class Prefs(object):
     def load_from_console(self):
 
         exists = self.exists()
+        if exists is True:
+            self.load()
+
         def get_default(id_):
             return self.__prefs[id_] if exists else _default_prefs[id_]
 
