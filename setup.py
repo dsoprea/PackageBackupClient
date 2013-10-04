@@ -56,7 +56,6 @@ setup(name='pmclient',
       zip_safe=True,
       install_requires=[
         'requests',
-        'snackwich',
         'pysecure'
       ],
       entry_points="""

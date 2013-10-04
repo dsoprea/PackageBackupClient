@@ -2,7 +2,6 @@ Requirements
 ============
 
 requests
-snackwich
 pysecure
 
 
