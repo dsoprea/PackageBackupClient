@@ -7,7 +7,7 @@ from subprocess import Popen
 from pmclient import tools
 from pmclient.setup_support import install_user_tool_symlink
 
-version = '0.1.4'
+version = '0.2.0'
 
 def pre_install():
     try:
