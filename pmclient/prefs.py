@@ -41,7 +41,7 @@ def _get_backup_config():
         with open(backup_config_filepath) as f:
             config_str = f.read()
     except IOError:
-        with open(backup_config_filepath, 'w') as f:
+        with open(backup_config_filepath, 'w+') as f:
             pass
 
         config_str = ''
@@ -89,6 +89,8 @@ def _validate_prefs(prefs_dict):
 class Prefs(object):
     def __init__(self):
         self.__prefs = None
+        if exists(_prefs_path) is False:
+            makedirs(_prefs_path)
 
 #    def initialize(self, values):
 #        self.__prefs = _default_prefs
@@ -142,9 +144,6 @@ class Prefs(object):
     
     def save(self):
         _validate_prefs(self.__prefs)
-
-        if exists(_prefs_path) is False:
-            makedirs(_prefs_path)
 
         with open(LOCK_FILEPATH, 'w') as l:
             lockf(l, LOCK_EX)        

@@ -31,9 +31,9 @@ def start_config():
                 print("Can not load current configuration: %s" % (str(e)))
                 exit(2)
 
-    load_prefs()
-
     if result.display:
+        load_prefs()
+
         for k, v in prefs.get_dict().items():
             print("%s: %s" % (k, v))
 
