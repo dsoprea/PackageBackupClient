@@ -1,10 +1,11 @@
 from os import environ
+from os.path import expandvars
 
 CLIENT_ID = 'e9d891152bb45b453111fbc4bda67f82c180450ebf50cc2ca265e96b82b149f1'\
             '00e06'
-PREFS_PATH = '$HOME/.package_backup'
+PREFS_PATH = environ.get('PM_PREFS_PATH', 
+                         expandvars('$HOME/.package_backup'))
 PREFS_FILENAME = 'prefs.json'
-PREFS_PATH_ENVIRON = 'PM_PREFS_PATH'
 LOCK_FILEPATH = '/tmp/pm_prefs.lock'
 
 API_CLIENT_ID_HEADER = 'X-Api-Client-Id'
@@ -21,4 +22,6 @@ def api_is_success(status_code):
     return (status_code == 200)
 
 BACKUP_AGENT_MODULE_PREFIX = 'pmclient.backup.'
+DEFAULT_BACKUP_MODULE = 'sftp_backup_client.SftpBackupClient'
+BACKUP_CONFIG_FILENAME = 'backup.py'
 

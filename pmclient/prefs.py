@@ -1,22 +1,28 @@
 import json
 
-from os import environ, remove, makedirs
-from os.path import exists, expandvars
+from os import environ, remove, makedirs, utime
+from os.path import exists, join
 from fcntl import lockf, LOCK_EX, LOCK_UN
 from shutil import rmtree
+from collections import OrderedDict
 
-from pmclient.config import PREFS_PATH, PREFS_FILENAME, PREFS_PATH_ENVIRON, \
-                            LOCK_FILEPATH, BACKUP_AGENT_MODULE_PREFIX
+from pmclient.config import PREFS_PATH, PREFS_FILENAME, LOCK_FILEPATH, \
+                            BACKUP_AGENT_MODULE_PREFIX, \
+                            DEFAULT_BACKUP_MODULE, BACKUP_CONFIG_FILENAME
+from pmclient.text_prompts import text_prompts
 
-_prefs_path = environ.get(PREFS_PATH_ENVIRON, expandvars(PREFS_PATH))
+_prefs_path = PREFS_PATH
 _prefs_filepath = ('%s/%s' % (_prefs_path, PREFS_FILENAME))
 
 _default_prefs = { 'version': 1,
-                   'system_name': None,
-                   'api_key': None,
-                   'api_secret': None,
-                   'backup_agent_class': 'sftp_backup_client.SftpBackupClient',
-                   'backup_agent_json_file': None }
+                   'system_name': '',
+                   'api_key': '',
+                   'api_secret': '',
+                   'backup_agent_class': DEFAULT_BACKUP_MODULE }
+
+_prompt_info = OrderedDict([('system_name', ('System Name', True, False)),
+                           ('api_key', ('API Key', True, True)),
+                           ('api_secret', ('API Secret', True, True))])
 
 # The prefs that always have to be given at initialization.
 _required_keys = ('system_name', 'api_key', 'api_secret')
@@ -24,8 +30,26 @@ _required_keys = ('system_name', 'api_key', 'api_secret')
 _max_lengths = { 'system_name': 30,
                  'api_key': 100,
                  'api_secret': 100,
-                 'backup_agent_class': 200,
-                 'backup_agent_json_file': 256 }
+                 'backup_agent_class': 200 }
+
+def _get_backup_config():
+    """Recover the backup config."""
+
+    backup_config_filepath = join(PREFS_PATH, BACKUP_CONFIG_FILENAME)
+
+    try:
+        with open(backup_config_filepath) as f:
+            config_str = f.read()
+    except IOError:
+        with open(backup_config_filepath, 'w') as f:
+            pass
+
+        config_str = ''
+
+    locals_ = {}
+    exec(config_str, {}, locals_)
+
+    return locals_
 
 def _get_backup_agent(backup_class_name):
     fq_class_name = ('%s%s' % (BACKUP_AGENT_MODULE_PREFIX, backup_class_name))
@@ -36,38 +60,31 @@ def _get_backup_agent(backup_class_name):
     module = __import__(module_name, fromlist=[class_name])
 
     try:
-        return getattr(module, class_name)
+        cls = getattr(module, class_name)
     except AttributeError:
         raise ImportError("Could not find/import class [%s] from [%s]." % 
                           (class_name, module_name))
 
-def _validate_prefs(prefs):
-    if prefs is None:
-        raise Exception("Prefs not loaded.")
-    
-    elif prefs.get('system_name') == '' or \
-         prefs.get('api_key') == '' or \
-         prefs.get('api_secret') == '':
+    locals_ = _get_backup_config()
+
+    # Create the instance.
+# TODO: Implement this.
+    return None#cls(**locals_)
+
+def _validate_prefs(prefs_dict):
+    if prefs_dict['system_name'] == '' or \
+         prefs_dict['api_key'] == '' or \
+         prefs_dict['api_secret'] == '':
 
         raise Exception("System name [%s], API key [%s], and/or API secret "
                         "[%s] are not complete." % 
-                        (prefs.get('system_name'),
-                         prefs.get('api_key'), 
-                         prefs.get('api_secret')))
+                        (prefs_dict['system_name'],
+                         prefs_dict['api_key'], 
+                         prefs_dict['api_secret']))
 
-    backup_agent_class_name = prefs.get('backup_agent_class').strip()
+    backup_agent_class_name = prefs_dict['backup_agent_class'].strip()
     if backup_agent_class_name != '':
         _get_backup_agent(backup_agent_class_name)
-
-    backup_agent_json_file = prefs.get('backup_agent_json_file').strip()
-    if backup_agent_json_file != '':
-        with open(backup_agent_json_file) as f:
-            json.load(f)
-
-    if (backup_agent_class_name == '') ^ (backup_agent_json_file == ''):
-        raise Exception("Both 'backup_agent_class' and "
-                        "'backup_agent_json_file' must either be given or "
-                        "omitted.")
 
 class Prefs(object):
     def __init__(self):
@@ -109,13 +126,17 @@ class Prefs(object):
         self.load()
         return self.__prefs
 
-    def load(self):
+    def load(self, auto_create=True):
         if self.__prefs is not None:
             return
 
+        if self.exists() is False:
+            self.__prefs = _default_prefs
+            self.save()
+
         with open(_prefs_filepath) as f:
             self.__prefs = json.load(f)
-        
+
     def exists(self):
         return exists(_prefs_filepath)
     
@@ -136,4 +157,25 @@ class Prefs(object):
                 json.dump(self.__prefs, f)
 
             lockf(l, LOCK_UN)
+
+    def load_from_console(self):
+        self.load()
+
+        prompts = OrderedDict([ (id_, 
+                                 (label_text, 
+                                  is_required, 
+                                  self.__prefs[id_],
+                                  False,
+                                  can_truncate)) 
+                              for (id_, (label_text, is_required, can_truncate)) 
+                              in _prompt_info.items() ])
+
+        responses = text_prompts(prompts)
+        
+        for k, v in _default_prefs.items():
+            if k not in responses:
+                responses[k] = v
+        
+        self.__prefs = responses
+        self.save()
 
