@@ -25,11 +25,10 @@ if __name__ == '__main__':
 
     # Gather data.
 
-    system_info = system_profiler().get_system_info()
     package_list = package_list_getter().get_package_list()
 
     try:
-        Client().list_push(system_info, package_list)
+        Client(system_profiler).list_push(package_list)
     except Exception as e:
         logging.exception("There was a problem pushing.")
         exit(1)

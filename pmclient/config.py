@@ -17,6 +17,7 @@ API_URL_PREFIX = environ.get('PM_API_URL_PREFIX',
                              API_DEFAULT_URL_PREFIX)
 
 API_URL_LIST_PUSH = ('%s%s' % (API_URL_PREFIX, '/api/list/push'))
+API_URL_LIST_GET = ('%s%s' % (API_URL_PREFIX, '/api/list/get'))
 
 def api_is_success(status_code):
     return (status_code == 200)
