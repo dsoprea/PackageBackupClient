@@ -90,26 +90,26 @@ class Prefs(object):
     def __init__(self):
         self.__prefs = None
 
-    def initialize(self, values):
-        self.__prefs = _default_prefs
-
-        possible = set(self.__prefs.keys())
-        required = set(_required_keys)
-        given = set(values.keys())
-
-        # Check if 'given' is completely within 'possible'.
-        if given.issubset(possible) is False:
-            raise Exception("One or more given prefs were invalid: %s" % 
-                            ((given - possible),))
-
-        # Check if 'required' is completely within 'given'.
-        if required.issubset(given) is False:
-            raise Exception("One or more required prefs were omitted: %s" % 
-                            ((required - given),))
-
-        for k, v in values.items():
-            self.set(k, v)
-
+#    def initialize(self, values):
+#        self.__prefs = _default_prefs
+#
+#        possible = set(self.__prefs.keys())
+#        required = set(_required_keys)
+#        given = set(values.keys())
+#
+#        # Check if 'given' is completely within 'possible'.
+#        if given.issubset(possible) is False:
+#            raise Exception("One or more given prefs were invalid: %s" % 
+#                            ((given - possible),))
+#
+#        # Check if 'required' is completely within 'given'.
+#        if required.issubset(given) is False:
+#            raise Exception("One or more required prefs were omitted: %s" % 
+#                            ((required - given),))
+#
+#        for k, v in values.items():
+#            self.set(k, v)
+#
     def set(self, key, value):
         if key not in self.__prefs:
             raise KeyError('Can not set invalid key [%s].' % (key))
@@ -126,13 +126,9 @@ class Prefs(object):
         self.load()
         return self.__prefs
 
-    def load(self, auto_create=True):
+    def load(self):
         if self.__prefs is not None:
             return
-
-        if self.exists() is False:
-            self.__prefs = _default_prefs
-            self.save()
 
         with open(_prefs_filepath) as f:
             self.__prefs = json.load(f)
@@ -159,12 +155,15 @@ class Prefs(object):
             lockf(l, LOCK_UN)
 
     def load_from_console(self):
-        self.load()
+
+        exists = self.exists()
+        def get_default(id_):
+            return self.__prefs[id_] if exists else _default_prefs[id_]
 
         prompts = OrderedDict([ (id_, 
                                  (label_text, 
                                   is_required, 
-                                  self.__prefs[id_],
+                                  get_default(id_),
                                   False,
                                   can_truncate)) 
                               for (id_, (label_text, is_required, can_truncate)) 

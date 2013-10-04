@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 
 from pmclient.prefs import Prefs
 
-if __name__ == '__main__':
+def start_config():
     description = "Modify the current user's Package Backup configuration."
 
     parser = ArgumentParser(description=description)
@@ -40,4 +40,7 @@ if __name__ == '__main__':
         exit(0)
 
     prefs.load_from_console()
+
+if __name__ == '__main__':
+    start_config()
 
