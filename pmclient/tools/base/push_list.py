@@ -2,6 +2,8 @@ import logging
 
 from argparse import ArgumentParser
 
+from pmclient.constants.http import HTTP_METHOD_ALREADY_EXISTS
+from pmclient.exceptions.http import HttpRequestError
 from pmclient.client import Client
 
 def push_list(system_profiler, package_list_getter):
@@ -19,9 +21,10 @@ def push_list(system_profiler, package_list_getter):
 
     try:
         Client(system_profiler).list_push(package_list)
-    except Exception as e:
-        logging.exception("There was a problem pushing.")
-        exit(1)
+    except HttpRequestError as e:
+        if e.code == HTTP_METHOD_ALREADY_EXISTS:
+            print("List has already been pushed for today.\n")
+            exit(2)
 
     print("Push successful.")
     exit(0)

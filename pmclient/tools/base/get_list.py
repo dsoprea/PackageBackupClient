@@ -30,15 +30,16 @@ def render_list_info(system_profiler):
                                                      date_string=result.date)
     except HttpRequestError as e:
         if e.code == INTERNAL_HTTP_NOT_FOUND:
-            stderr.write("No list found.")
+            stderr.write("No list found.\n\n")
             exit(2)
 
         raise
 
     (list_name, list_filename, content) = list_info
 
-    stderr.write("Writing list with name [%s] to [%s].\n\n" % 
-                 (list_name, result.outputfile))
+    stderr.write("Writing list with name [%s] to [%s]. Please note that, if "
+                 "this name resembles a timestamp, it will be in the UTC "
+                 "timezone.\n\n" % (list_name, result.outputfile))
 
     if result.outputfile == '-':
         stdout.write(content)
