@@ -32,8 +32,10 @@ def pre_install():
 def post_install():
     print("")
     install_user_tool_symlink('pmclient.tools.pm_config')
-    install_user_tool_symlink('pmclient.tools.pm_push_dpkg')
-    install_user_tool_symlink('pmclient.tools.pm_push_pacman')
+    install_user_tool_symlink('pmclient.tools.pm_pushlist_dpkg')
+    install_user_tool_symlink('pmclient.tools.pm_pushlist_pacman')
+    install_user_tool_symlink('pmclient.tools.pm_getlist_dpkg')
+    install_user_tool_symlink('pmclient.tools.pm_getlist_pacman')
 
     from pmclient.tools.pm_config import start_config
     start_config()
