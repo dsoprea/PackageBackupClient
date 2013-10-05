@@ -25,6 +25,8 @@ def push_list(system_profiler, package_list_getter):
         if e.code == HTTP_METHOD_ALREADY_EXISTS:
             print("List has already been pushed for today.\n")
             exit(2)
+        
+        raise
 
     print("Push successful.")
     exit(0)

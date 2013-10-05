@@ -5,7 +5,8 @@ from setuptools.command.install import install
 from subprocess import Popen
 
 from pmclient import tools
-from pmclient.setup_support import install_user_tool_symlink
+from pmclient.libs.random_utility.setup_support import \
+        install_user_tool_symlink
 
 version = '0.3.1'
 

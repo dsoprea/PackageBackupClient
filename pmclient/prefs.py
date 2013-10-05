@@ -9,7 +9,7 @@ from collections import OrderedDict
 from pmclient.config import PREFS_PATH, PREFS_FILENAME, LOCK_FILEPATH, \
                             BACKUP_AGENT_MODULE_PREFIX, \
                             DEFAULT_BACKUP_MODULE, BACKUP_CONFIG_FILENAME
-from pmclient.text_prompts import text_prompts
+from pmclient.libs.random_utility.text_prompts import text_prompts
 
 _prefs_path = PREFS_PATH
 _prefs_filepath = ('%s/%s' % (_prefs_path, PREFS_FILENAME))
