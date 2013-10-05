@@ -19,20 +19,19 @@ from pmclient.utility import stringify
 
 class Client(object):
     def __init__(self, system_profiler_cls):
-        self.__system_profiler = system_profiler_cls()
-    
         self.__prefs = Prefs()
         self.__prefs.load()
+
+        self.__system_profiler = system_profiler_cls()
+        self.__system_info = self.__system_profiler.get_system_info()
 
     def __send(self, type_phrase, url, data_extra, is_raw=False):
         logging.debug("Sending to [%s]." % (url))
 
-        system_info = self.__system_profiler.get_system_info()
-
         packaged_system_info =  { 'sn': self.__prefs.get('system_name'),
-                                  'rt': system_info.repo_type,
-                                  'ot': system_info.os_type, 
-                                  'ov': system_info.os_version, 
+                                  'rt': self.__system_info.repo_type,
+                                  'ot': self.__system_info.os_type, 
+                                  'ov': self.__system_info.os_version, 
                                   'tn': tzname[0] }
 
         packaged_system_info_encoded = json.dumps(packaged_system_info)
@@ -88,7 +87,7 @@ class Client(object):
         return response_data
 
     def list_push(self, package_list_raw):
-        logging.debug("Pushing list to system [%s]." % (system_info))
+        logging.debug("Pushing list to system [%s]." % (self.__system_info))
     
         package_list_bz2 = compress(package_list_raw)
 
@@ -101,6 +100,8 @@ class Client(object):
         """Retrieve a list. If no name is provided, the most recent will be 
         retrieved.
         """
+
+        logging.debug("Recalling list for system [%s]." % (self.__system_info))
 
         if date_string is not None:
             try:
