@@ -4,8 +4,8 @@ from setuptools import setup, find_packages
 from setuptools.command.install import install
 from subprocess import Popen
 
-from pmclient import tools
-from pmclient.libs.random_utility.setup_support import \
+from pbclient import tools
+from pbclient.libs.random_utility.setup_support import \
         install_user_tool_symlink
 
 version = '0.3.3'
@@ -31,13 +31,13 @@ def pre_install():
 
 def post_install():
     print("")
-    install_user_tool_symlink('pmclient.tools.pm_config')
-    install_user_tool_symlink('pmclient.tools.pm_pushlist_dpkg')
-    install_user_tool_symlink('pmclient.tools.pm_pushlist_pacman')
-    install_user_tool_symlink('pmclient.tools.pm_getlist_dpkg')
-    install_user_tool_symlink('pmclient.tools.pm_getlist_pacman')
+    install_user_tool_symlink('pbclient.tools.pm_config')
+    install_user_tool_symlink('pbclient.tools.pm_pushlist_dpkg')
+    install_user_tool_symlink('pbclient.tools.pm_pushlist_pacman')
+    install_user_tool_symlink('pbclient.tools.pm_getlist_dpkg')
+    install_user_tool_symlink('pbclient.tools.pm_getlist_pacman')
 
-    from pmclient.tools.pm_config import start_config
+    from pbclient.tools.pm_config import start_config
     start_config()
 
 class custom_install(install):
@@ -46,7 +46,7 @@ class custom_install(install):
         install.run(self)
         post_install()
 
-setup(name='pmclient',
+setup(name='pbclient',
       version=version,
       description="A client for the Package Backup package-list backup service.",
       long_description="A client for the Package Backup package-list backup service.",
@@ -58,9 +58,9 @@ setup(name='pmclient',
       keywords='package-list packagelist backup packagebackup package-backup',
       author='Dustin Oprea',
       author_email='myselfasunder@gmail.com',
-      url='https://github.com/dsoprea/PmClient',
+      url='https://github.com/dsoprea/pbclient',
       license='GPL2',
-      packages=['pmclient'],
+      packages=['pbclient'],
       include_package_data=True,
       zip_safe=True,
       install_requires=[
