@@ -8,7 +8,7 @@ from pbclient import tools
 from pbclient.libs.random_utility.setup_support import \
         install_user_tool_symlink
 
-version = '0.3.4'
+version = '0.4.0'
 
 def pre_install():
     try:

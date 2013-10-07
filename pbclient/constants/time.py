@@ -1,0 +1,3 @@
+DATE_FORMAT = '%Y-%m-%d'
+DATE_FORMAT_HUMAN = 'YYYY-MM-DD'
+
