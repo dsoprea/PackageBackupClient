@@ -32,7 +32,7 @@ def _get_physical_path(fq_module_spec):
     print("Module [%s] refers to: %s" % (fq_module_spec, module_filepath))
     return module_filepath
 
-def _install_tool_symlink(fq_module_spec, deposit_path_rel):
+def _install_tool_symlink(fq_module_spec, deposit_path_rel, mask=0o775):
     module_filepath = _get_physical_path(fq_module_spec)
     module_filename = basename(module_filepath)
 
@@ -49,6 +49,7 @@ def _install_tool_symlink(fq_module_spec, deposit_path_rel):
     print("Creating executable symlink at [%s] with target [%s]." % 
           (deposit_filepath, module_filepath))
 
+    chmod(module_filepath, mask)
     symlink(module_filepath, deposit_filepath)
 
     # Permissions should already be set correctly.

@@ -1,8 +1,8 @@
 Metadata-Version: 1.1
-Name: pmclient
-Version: 0.1.2
+Name: pbclient
+Version: 0.4.0
 Summary: A client for the Package Backup package-list backup service.
-Home-page: https://github.com/dsoprea/PmClient
+Home-page: https://github.com/dsoprea/pbclient
 Author: Dustin Oprea
 Author-email: myselfasunder@gmail.com
 License: GPL2

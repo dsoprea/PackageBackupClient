@@ -2,43 +2,11 @@
 
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from subprocess import Popen
 
-from pbclient import tools
-from pbclient.libs.random_utility.setup_support import \
-        install_user_tool_symlink
+from pbclient.install_phases import pre_install, post_install
 
-version = '0.4.0'
+version = '0.5.0'
 
-def pre_install():
-    try:
-        Popen('lsb_release')
-    except FileNotFoundError:
-        print("lsb_release doesn't seem to be available. Please make sure "
-              "that it's installed.")
-        raise
-
-    # The setuptools requirements check should catch this, but an exception
-    # about a missing shared library might be confusing.
-    print("Verifying that PySecure exists.")
-
-    try:
-        import pysecure
-    except:
-        print("PySecure can not be loaded. Please make sure that it's "
-              "installed, along with its dependencies.")
-        raise
-
-def post_install():
-    print("")
-    install_user_tool_symlink('pbclient.tools.pm_config')
-    install_user_tool_symlink('pbclient.tools.pm_pushlist_dpkg')
-    install_user_tool_symlink('pbclient.tools.pm_pushlist_pacman')
-    install_user_tool_symlink('pbclient.tools.pm_getlist_dpkg')
-    install_user_tool_symlink('pbclient.tools.pm_getlist_pacman')
-
-    from pbclient.tools.pm_config import start_config
-    start_config()
 
 class custom_install(install):
     def run(self):
@@ -60,12 +28,13 @@ setup(name='pbclient',
       author_email='myselfasunder@gmail.com',
       url='https://github.com/dsoprea/pbclient',
       license='GPL2',
-      packages=['pbclient'],
+      packages=find_packages(),
       include_package_data=True,
       zip_safe=True,
       install_requires=[
         'requests',
-        'pysecure'
+        'pysecure',
+        'python-crontab',
       ],
       entry_points="""
       # -*- Entry points: -*-

@@ -8,6 +8,9 @@ from argparse import ArgumentParser
 from pbclient.prefs import Prefs
 
 def start_config():
+    Prefs().load_from_console()
+
+if __name__ == '__main__':
     description = "Modify the current user's Package Backup configuration."
 
     parser = ArgumentParser(description=description)
@@ -18,7 +21,6 @@ def start_config():
 
     result = parser.parse_args()
 
-    prefs = Prefs()
 
     def load_prefs():
         try:
@@ -39,8 +41,5 @@ def start_config():
 
         exit(0)
 
-    prefs.load_from_console()
-
-if __name__ == '__main__':
     start_config()
 

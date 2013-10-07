@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3.3
 
 from sys import exit, path
 path.insert(0, '.')
