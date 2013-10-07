@@ -5,7 +5,7 @@ from setuptools.command.install import install
 
 from pbclient.install_phases import pre_install, post_install
 
-version = '0.5.0'
+version = '0.5.1'
 
 
 class custom_install(install):
