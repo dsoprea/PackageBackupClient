@@ -5,7 +5,7 @@ from setuptools.command.install import install
 
 from pbclient.install_phases import pre_install, post_install
 
-version = '0.5.2'
+version = '0.5.3'
 
 
 class custom_install(install):
@@ -16,7 +16,7 @@ class custom_install(install):
 
 setup(name='pbclient',
       version=version,
-      description="A client for the Package Backup package-list backup service.",
+      description="A client for the http://packagebackup.com package-list backup service.",
       long_description="A client for the Package Backup package-list backup service.",
       classifiers=['Development Status :: 3 - Alpha',
                    'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
