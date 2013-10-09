@@ -17,6 +17,9 @@ pbclient.egg-info/zip-safe
 pbclient/backup/__init__.py
 pbclient/backup/ibackup_client.py
 pbclient/backup/sftp_backup_client.py
+pbclient/constants/__init__.py
+pbclient/constants/http.py
+pbclient/constants/time.py
 pbclient/exceptions/__init__.py
 pbclient/exceptions/http.py
 pbclient/fs/__init__.py
