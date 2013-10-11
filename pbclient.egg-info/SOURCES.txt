@@ -32,7 +32,6 @@ pbclient/interfaces/system_specific/ipackage_list_getter.py
 pbclient/interfaces/system_specific/isystem_profiler.py
 pbclient/libs/__init__.py
 pbclient/libs/random_utility/__init__.py
-pbclient/libs/random_utility/setup_support.py
 pbclient/libs/random_utility/text_prompts.py
 pbclient/system/__init__.py
 pbclient/system/system_info.py
@@ -46,12 +45,11 @@ pbclient/test/__init__.py
 pbclient/test/sftp_backup_client_test.py
 pbclient/test/test_config.py
 pbclient/tools/__init__.py
-pbclient/tools/pb_config.py
-pbclient/tools/pb_getlist_dpkg.py
-pbclient/tools/pb_getlist_pacman.py
-pbclient/tools/pb_pushlist_dpkg.py
-pbclient/tools/pb_pushlist_pacman.py
-pbclient/tools/pb_uninstall.py
+pbclient/tools/pb_config
+pbclient/tools/pb_getlist_dpkg
+pbclient/tools/pb_getlist_pacman
+pbclient/tools/pb_pushlist_dpkg
+pbclient/tools/pb_pushlist_pacman
 pbclient/tools/base/__init__.py
 pbclient/tools/base/get_list.py
 pbclient/tools/base/push_list.py

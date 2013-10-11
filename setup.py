@@ -5,7 +5,7 @@ from setuptools.command.install import install
 
 from pbclient.install_phases import pre_install, post_install
 
-version = '0.5.4'
+version = '0.5.6'
 
 
 class custom_install(install):
@@ -41,5 +41,10 @@ setup(name='pbclient',
       """,
       cmdclass={'install': custom_install
                },
+      scripts=['pbclient/tools/pb_config',
+               'pbclient/tools/pb_pushlist_dpkg',
+               'pbclient/tools/pb_pushlist_pacman',
+               'pbclient/tools/pb_getlist_dpkg',
+               'pbclient/tools/pb_getlist_pacman']
       )
 

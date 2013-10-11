@@ -1,24 +1,13 @@
 from subprocess import Popen, PIPE
 from os import environ, unlink
 
-from pbclient import tools
-from pbclient.libs.random_utility.setup_support import \
-        install_user_tool_symlink
-
 _REPO_DPKG = 'dpkg'
 _REPO_PACMAN = 'pacman'
 
 _REPO_TYPES = set([_REPO_DPKG, _REPO_PACMAN])
 
-_TOOL_CONFIG = "pb_config"
 _TOOL_PUSHLIST_DPKG = "pb_pushlist_dpkg"
 _TOOL_PUSHLIST_PACMAN = "pb_pushlist_pacman"
-_TOOL_GETLIST_DPKG = "pb_getlist_dpkg"
-_TOOL_GETLIST_PACMAN = "pb_getlist_pacman"
-_TOOL_UNINSTALL = "pb_uninstall"
-
-_TOOL_LIST = [ _TOOL_CONFIG, _TOOL_PUSHLIST_DPKG, _TOOL_PUSHLIST_PACMAN,
-               _TOOL_GETLIST_DPKG, _TOOL_GETLIST_PACMAN, _TOOL_UNINSTALL ]
 
 _CRON_PUSH_TOOL_MAP = { _REPO_DPKG: _TOOL_PUSHLIST_DPKG,
                         _REPO_PACMAN: _TOOL_PUSHLIST_PACMAN }
@@ -116,16 +105,6 @@ class _CrontabConfig(object):
 
 _crontab_config = _CrontabConfig()
 
-def uninstall():
-    print("Looking for a crontab entry, to be removed.")
-    _crontab_config.clear_existing()
-
-    for tool_filename in _TOOL_LIST:
-        tool_filepath = _get_full_filepath(tool_filename)
-
-        print("Removing: %s" % (tool_filepath))
-        unlink(tool_filepath)
-
 def pre_install():
     try:
         Popen('lsb_release', stdout=PIPE, stderr=PIPE)
@@ -147,19 +126,10 @@ def pre_install():
 
 def post_install():
     print("")
-    
-    print("Installing symlinks.")
-    install_user_tool_symlink('pbclient.tools.pb_config')
-    install_user_tool_symlink('pbclient.tools.pb_pushlist_dpkg')
-    install_user_tool_symlink('pbclient.tools.pb_pushlist_pacman')
-    install_user_tool_symlink('pbclient.tools.pb_getlist_dpkg')
-    install_user_tool_symlink('pbclient.tools.pb_getlist_pacman')
-    install_user_tool_symlink('pbclient.tools.pb_uninstall')
-
     print("Starting config.")
 
-    from pbclient.tools.pb_config import start_config
-    start_config()
+    from pbclient.prefs import Prefs
+    Prefs().load_from_console()
 
     print("Installing crontab job.")
     _crontab_config.install()
