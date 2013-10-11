@@ -1,5 +1,6 @@
 from subprocess import Popen, PIPE
 from os import environ, unlink
+from sys import version_info
 
 _REPO_DPKG = 'dpkg'
 _REPO_PACMAN = 'pacman'
@@ -106,6 +107,9 @@ class _CrontabConfig(object):
 _crontab_config = _CrontabConfig()
 
 def pre_install():
+    if version_info[0] < 3:
+        raise SystemError("Please install using Python 3.x .")
+
     try:
         Popen('lsb_release', stdout=PIPE, stderr=PIPE)
     except FileNotFoundError:
