@@ -6,7 +6,9 @@
 # tools.                                                                      #
 ###############################################################################
 
-from sys import stdout
+from sys import stderr
+
+_out = stdout
 
 class PromptAbortException(Exception):
     pass
@@ -45,25 +47,25 @@ def _render_prompt(id_, do_space, label_text, is_required, default_value,
         required_phrase = ''        
 
     if do_space is True:
-        print('')
+        _out.write('\n')
 
     prompt = ('> ' if with_nl is True else '')
 
     i = 0
     while 1:
-        stdout.write("%s%s%s:" % 
+        _out.write("%s%s%s:" % 
                      (label_text, default_phrase, required_phrase))
         
         if with_nl is True:
-            stdout.write("\n")
+            _out.write("\n")
         else:
-            stdout.write(' ')
+            _out.write(' ')
 
         try:
             answer = raw_input(prompt).strip()
         except EOFError:
             """The user aborted the prompt (CTRL+D under Linux)."""
-            print('')
+            _out.write('\n')
 
             is_abort = True
             answer = default_value
@@ -77,7 +79,7 @@ def _render_prompt(id_, do_space, label_text, is_required, default_value,
             if i >= 3:
                 raise PromptAbortException((id_, label_text))
 
-            print("\nPlease enter something.\n")
+            _out.write("\nPlease enter something.\n\n")
             continue
         elif is_required is False and is_abort is True:
             answer = default_value

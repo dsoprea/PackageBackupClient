@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: pbclient
-Version: 0.5.7
+Version: 0.6.4
 Summary: A client for the http://packagebackup.com package-list backup service.
 Home-page: https://github.com/dsoprea/pbclient
 Author: Dustin Oprea

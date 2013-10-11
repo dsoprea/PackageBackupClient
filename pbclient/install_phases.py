@@ -2,33 +2,17 @@ from subprocess import Popen, PIPE
 from os import environ, unlink
 from sys import version_info
 
-_REPO_DPKG = 'dpkg'
-_REPO_PACMAN = 'pacman'
+REPO_DPKG = 'dpkg'
+REPO_PACMAN = 'pacman'
 
-_REPO_TYPES = set([_REPO_DPKG, _REPO_PACMAN])
-
-_TOOL_PUSHLIST_DPKG = "pb_pushlist_dpkg"
-_TOOL_PUSHLIST_PACMAN = "pb_pushlist_pacman"
-
-_CRON_PUSH_TOOL_MAP = { _REPO_DPKG: _TOOL_PUSHLIST_DPKG,
-                        _REPO_PACMAN: _TOOL_PUSHLIST_PACMAN }
-
-def _get_full_filepath(executable):
-    p = Popen(['which', executable], stdout=PIPE, stderr=PIPE)
-    (stdout_data, ignore_) = p.communicate()
-    file_path = stdout_data.strip().decode('ASCII')
-
-    if file_path == '':
-        raise LookupError("Could not resolve executable: %s" % (executable))
-
-    return file_path
+REPO_TYPES = set([REPO_DPKG, REPO_PACMAN])
 
 def _determine_repo_type():
     """Return the name of the system's package repository."""
 
     prescribed = environ.get('REPO_TYPE')
     if prescribed is not None:
-        if prescribed not in _REPO_TYPES:
+        if prescribed not in REPO_TYPES:
             raise ValueError("Prescribed repo-type [%s] is not valid." % 
                              (prescribed))
         
@@ -41,14 +25,14 @@ def _determine_repo_type():
     except FileNotFoundError:
         pass
     else:
-        repo.append(_REPO_DPKG)
+        repo.append(REPO_DPKG)
 
     try:
         Popen('pacman', stdout=PIPE, stderr=PIPE)
     except:
         pass
     else:
-        repo.append(_REPO_PACMAN)
+        repo.append(REPO_PACMAN)
 
     len_ = len(repo)
 
@@ -60,6 +44,22 @@ def _determine_repo_type():
 
     return repo[0]
 
+REPO_TYPE = _determine_repo_type()
+
+if REPO_TYPE == REPO_DPKG:
+    _TOOL_PUSHLIST_FILENAME = "pb_pushlist_dpkg"
+else:
+    _TOOL_PUSHLIST_FILENAME = "pb_pushlist_pacman"
+
+def _get_full_filepath(executable):
+    p = Popen(['which', executable], stdout=PIPE, stderr=PIPE)
+    (stdout_data, ignore_) = p.communicate()
+    file_path = stdout_data.strip().decode('ASCII')
+
+    if file_path == '':
+        raise LookupError("Could not resolve executable: %s" % (executable))
+
+    return file_path
 
 class _CrontabConfig(object):
     __comment = "Package Backup push tool"
@@ -67,11 +67,6 @@ class _CrontabConfig(object):
     def __init__(self):
         from crontab import CronTab    
         self.__cron = CronTab()
-
-    def __get_pushtool_filepath(self):
-        repo_type = _determine_repo_type()
-        tool_name = _CRON_PUSH_TOOL_MAP[repo_type]
-        return _get_full_filepath(tool_name)
 
     def __get_existing(self):
         list_ = self.__cron.find_comment(self.__class__.__comment)
@@ -94,7 +89,7 @@ class _CrontabConfig(object):
     def install(self):
         self.clear_existing()
 
-        pushtool_filepath = self.__get_pushtool_filepath()
+        pushtool_filepath = _get_full_filepath(_TOOL_PUSHLIST_FILENAME)
         print("Installing tool [%s] as crontab job [%s]." % 
               (pushtool_filepath, self.__comment))
 
@@ -129,12 +124,13 @@ def pre_install():
         raise
 
 def post_install():
-    print("")
-    print("Starting config.")
-
-    from pbclient.prefs import Prefs
-    Prefs().load_from_console()
-
+# Is not visible when invoked from within Setuptools.
+#    print("")
+#    print("Starting config.")
+#
+#    from pbclient.prefs import Prefs
+#    Prefs().load_from_console()
+#
     print("Installing crontab job.")
     _crontab_config.install()
 
