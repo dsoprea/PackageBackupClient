@@ -6,7 +6,7 @@
 # tools.                                                                      #
 ###############################################################################
 
-from sys import stderr
+from sys import stdout
 
 _out = stdout
 
