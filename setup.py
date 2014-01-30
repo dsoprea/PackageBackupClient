@@ -6,7 +6,7 @@ from setuptools.command.install import install
 from pbclient.install_phases import pre_install, post_install, REPO_TYPE, \
                                     REPO_DPKG, REPO_PACMAN
 
-version = '0.6.7'
+version = '0.6.8'
 
 _scripts = ['pbclient/tools/pb_config']
 
