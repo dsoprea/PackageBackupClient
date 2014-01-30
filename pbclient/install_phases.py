@@ -69,7 +69,7 @@ class _CrontabConfig(object):
         self.__cron = CronTab()
 
     def __get_existing(self):
-        list_ = self.__cron.find_comment(self.__class__.__comment)
+        list_ = list(self.__cron.find_comment(self.__class__.__comment))
         if len(list_) == 0:
             raise LookupError()
 
@@ -94,7 +94,8 @@ class _CrontabConfig(object):
               (pushtool_filepath, self.__comment))
 
         job = self.__cron.new(command=pushtool_filepath)
-        job.meta(self.__class__.__comment)
+        
+        job.comment = self.__class__.__comment
         job.special = "@daily"
         
         self.__cron.write()
