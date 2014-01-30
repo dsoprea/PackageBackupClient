@@ -22,7 +22,7 @@ def _determine_repo_type():
 
     try:
         Popen('dpkg', stdout=PIPE, stderr=PIPE)
-    except FileNotFoundError:
+    except OSError:
         pass
     else:
         repo.append(REPO_DPKG)
@@ -107,7 +107,7 @@ def pre_install():
 
     try:
         Popen('lsb_release', stdout=PIPE, stderr=PIPE)
-    except FileNotFoundError:
+    except OSError:
         print("lsb_release doesn't seem to be available. Please make sure "
               "that it's installed.")
         raise
