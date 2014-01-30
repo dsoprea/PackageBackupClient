@@ -23,20 +23,24 @@ if __name__ == '__main__':
 
 
     def load_prefs():
+        p = Prefs()
+
         try:
-            prefs.load()
+            p.load()
         except Exception as e:
-            if prefs.exists() is False:
+            if p.exists() is False:
                 print("Can not load current configuration. It does not exist.")
                 exit(1)
             else:
                 print("Can not load current configuration: %s" % (str(e)))
                 exit(2)
 
-    if result.display:
-        load_prefs()
+        return p
 
-        for k, v in prefs.get_dict().items():
+    if result.display:
+        p = load_prefs()
+
+        for k, v in p.get_dict().items():
             print("%s: %s" % (k, v))
 
         exit(0)
