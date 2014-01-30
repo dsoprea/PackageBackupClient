@@ -6,7 +6,7 @@ from setuptools.command.install import install
 from pbclient.install_phases import pre_install, post_install, REPO_TYPE, \
                                     REPO_DPKG, REPO_PACMAN
 
-version = '0.6.5'
+version = '0.6.6'
 
 _scripts = ['pbclient/tools/pb_config']
 
@@ -36,7 +36,7 @@ setup(name='pbclient',
       keywords='package-list packagelist backup packagebackup package-backup',
       author='Dustin Oprea',
       author_email='myselfasunder@gmail.com',
-      url='https://github.com/dsoprea/pbclient',
+      url='https://github.com/dsoprea/PackageBackupClient',
       license='GPL2',
       packages=find_packages(),
       include_package_data=True,
